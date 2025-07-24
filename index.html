@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>射手座大王の抽象王国</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --berry-pink: #FF5A8C;
+            --gold: #FFD700;
+            --deep-purple: #6A5ACD;
+            --cream: #FFF8E8;
+            --shadow: 0 8px 32px rgba(106, 90, 205, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #FFF8E8 0%, #FFEDF7 100%);
+            color: #333;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(255, 218, 221, 0.3) 0px, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 218, 221, 0.3) 0px, transparent 50%);
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            z-index: 100;
+            transition: all 0.5s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--berry-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--berry-pink), var(--deep-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--deep-purple);
+            font-weight: bold;
+            position: relative;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--berry-pink);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--berry-pink);
+        }
+
+        /* 页面容器 */
+        .page-container {
+            padding-top: 100px;
+        }
+
+        /* 王座封面区 */
+        .throne-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,90,140,0.1) 0%, rgba(255,215,0,0.1) 100%);
+            z-index: -2;
+        }
+
+        .star-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 30%, var(--gold) 2px, transparent 3px),
+                radial-gradient(circle at 50% 70%, var(--deep-purple) 1px, transparent 2px),
+                radial-gradient(circle at 80% 40%, var(--berry-pink) 3px, transparent 4px),
+                radial-gradient(circle at 30% 80%, var(--gold) 2px, transparent 3px);
+            background-size: 200px 200px;
+            z-index: -3;
+            animation: rotateStars 100s linear infinite;
+        }
+
+        .candy-skewers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="4" fill="%23FF5A8C"/><circle cx="30" cy="25" r="4" fill="%23FF5A8C"/><circle cx="50" cy="15" r="4" fill="%23FF5A8C"/><circle cx="70" cy="30" r="4" fill="%23FF5A8C"/><circle cx="90" cy="20" r="4" fill="%23FF5A8C"/></svg>');
+            background-size: 100px 100px;
+            opacity: 0.5;
+        }
+
+        .title-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            position: relative;
+            color: var(--deep-purple);
+        }
+
+        .main-title span {
+            display: block;
+            font-size: 3rem;
+            color: var(--berry-pink);
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 8px;
+            background: linear-gradient(90deg, var(--berry-pink), var(--gold));
+            border-radius: 4px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin: 30px 0;
+            color: var(--deep-purple);
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .subtitle::before {
+            content: '“';
+            position: absolute;
+            top: -30px;
+            left: -20px;
+            font-size: 5rem;
+            color: var(--berry-pink);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .crown-btn {
+            background: linear-gradient(45deg, var(--berry-pink), var(--deep-purple));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(255,90,140,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .crown-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+
+        .crown-btn:hover::before {
+            left: 100%;
+        }
+
+        .crown-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255,90,140,0.4);
+        }
+
+        .crown-icon {
+            margin-right: 10px;
+        }
+
+        /* 疆域图鉴 */
+        .realm-section {
+            padding: 100px 50px;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 70px;
+            color: var(--deep-purple);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--berry-pink), var(--gold));
+            border-radius: 5px;
+        }
+
+        .realm-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .realm-card {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .realm-card:hover {
+            transform: translateY(-20px);
+            box-shadow: 0 25px 50px rgba(106, 90, 205, 0.3);
+        }
+
+        .card-header {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crystal-bg {
+            background: linear-gradient(135deg, #4A00E0, #8E2DE2);
+        }
+
+        .river-bg {
+            background: linear-gradient(135deg, #FF5A8C, #FF8E8C);
+        }
+
+        .cloud-bg {
+            background: linear-gradient(135deg, #5A8CFF, #8CFFD0);
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .card-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--deep-purple);
+        }
+
+        .card-desc {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card-quote {
+            font-style: italic;
+            color: var(--berry-pink);
+            font-weight: bold;
+            text-align: right;
+            border-right: 3px solid var(--gold);
+            padding-right: 15px;
+        }
+
+        /* 朝堂日常 */
+        .court-section {
+            padding: 100px 50px;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFFAF0 100%);
+            position: relative;
+        }
+
+        .court-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .court-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .court-item:hover {
+            transform: scale(1.03);
+        }
+
+        .court-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--berry-pink), var(--gold));
+        }
+
+        .court-icon {
+            font-size: 2.5rem;
+            color: var(--berry-pink);
+            margin-bottom: 20px;
+        }
+
+        .court-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--deep-purple);
+        }
+
+        .court-desc {
+            line-height: 1.7;
+            color: #666;
+        }
+
+        /* 自由宣言 */
+        .freedom-section {
+            padding: 150px 50px;
+            text-align: center;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1505506874110-6a7a69069a08?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            color: white;
+        }
+
+        .freedom-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(106, 90, 205, 0.7);
+            z-index: 1;
+        }
+
+        .freedom-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .freedom-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            margin-bottom: 40px;
+            color: var(--gold);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .freedom-text {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-top: 40px;
+        }
+
+        /* 动画 */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes rotateStars {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .realm-container {
+                flex-direction: column;
+            }
+
+            .main-title {
+                font-size: 3.5rem;
+            }
+
+            .main-title span {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .throne-section, .realm-section, .court-section, .freedom-section {
+                padding: 50px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="logo-text">射手座大王</div>
+        </div>
+        <div class="nav-links">
+            <a href="#throne">王座</a>
+            <a href="#realm">疆域</a>
+            <a href="#court">朝堂</a>
+            <a href="#freedom">宣言</a>
+        </div>
+    </nav>
+
+    <!-- 王座封面区 -->
+    <section id="throne" class="throne-section">
+        <div class="star-map"></div>
+        <div class="candy-skewers"></div>
+        <div class="bg-overlay"></div>
+
+        <div class="title-content">
+            <h1 class="main-title">射手座大王<br><span>抽象日历上的猫之守护者
+                --叫我刘琪学姐</span></h1>
+
+            <p class="subtitle">
+                我的疆域是草莓糖葫芦签子串起的星图：王者峡谷崩塌的水晶在左，和平精英惊飞的云絮在右，中央是螺蛳粉味的银河，正被午夜的胃袋煮沸。
+            </p>
+
+            <button class="crown-btn">
+                <i class="fas fa-crown crown-icon"></i>开启朝拜之旅
+            </button>
+        </div>
+    </section>
+
+    <!-- 疆域图鉴 -->
+    <section id="realm" class="realm-section">
+        <h2 class="section-title">我的抽象疆域</h2>
+
+        <div class="realm-container">
+            <!-- 王者峡谷 -->
+            <div class="realm-card">
+                <div class="card-header crystal-bg">
+                    <i class="fas fa-gem card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">王者峡谷水晶</h3>
+                    <p class="card-desc">
+                        左侧疆域由崩塌的水晶构筑，每一片碎片都折射着战斗的荣光与挫败的泪水。在这里，策略与热血交织，每一次重生都是新的征途。
+                    </p>
+                    <p class="card-quote">"水晶可以碎，但射手座的箭永不偏航"</p>
+                </div>
+            </div>
+
+            <!-- 螺蛳粉银河 -->
+            <div class="realm-card">
+                <div class="card-header river-bg">
+                    <i class="fas fa-utensils card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">螺蛳粉味银河</h3>
+                    <p class="card-desc">
+                        中央是沸腾的螺蛳粉银河，酸笋星球漂浮其中，辣油星云环绕其周。当午夜钟声敲响，整个宇宙都弥漫着令人上头的香气。
+                    </p>
+                    <p class="card-quote">"此刻，螺蛳粉即命运！"</p>
+                </div>
+            </div>
+
+            <!-- 和平精英云絮 -->
+            <div class="realm-card">
+                <div class="card-header cloud-bg">
+                    <i class="fas fa-cloud card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">惊飞云絮之境</h3>
+                    <p class="card-desc">
+                        右侧疆域飘散着和平精英的云絮，每一片都承载着惊心动魄的降落与绝地反击。在这里，勇气是唯一的通行证。
+                    </p>
+                    <p class="card-quote">"云絮之上，皆是王土"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 朝堂日常 -->
+    <section id="court" class="court-section">
+        <h2 class="section-title">我的随性朝堂</h2>
+
+        <div class="court-content">
+            <div class="court-item">
+                <i class="fas fa-scroll court-icon"></i>
+                <h3 class="court-title">糖纸圣旨</h3>
+                <p class="court-desc">
+                    旧糖纸裱的圣旨写着"我值得拥有"，每个字都沾着草莓味和童年偷吃糖果的窃喜。
+                </p>
+            </div>
+
+            <div class="court-item">
+                <i class="fas fa-crown court-icon"></i>
+                <h3 class="court-title">奶茶冠冕</h3>
+                <p class="court-desc">
+                    凉掉的奶茶戴着锡纸冠冕，珍珠是镶嵌其上的宝石，吸管是权杖，每一口都是甜蜜的统治。
+                </p>
+            </div>
+
+            <div class="court-item">
+                <i class="fas fa-user-graduate court-icon"></i>
+                <h3 class="court-title">采蘑菇税</h3>
+                <p class="court-desc">
+                    练习两年半的学长在野区替我采蘑菇税，他的篮子里装着奇异菌类和走音的歌声。
+                </p>
+            </div>
+
+            <div class="court-item">
+                <i class="fas fa-tshirt court-icon"></i>
+                <h3 class="court-title">洗衣机要塞</h3>
+                <p class="court-desc">
+                    洗衣机要塞里，迷路的玩偶正罚站——"和我的心情一样。" 旋转的水流是它们的旋转木马。
+                </p>
+            </div>
+
+            <div class="court-item">
+                <i class="fas fa-comments court-icon"></i>
+                <h3 class="court-title">子民过客</h3>
+                <p class="court-desc">
+                    子民是朋友圈的过客，发着29元一格的星空许可证，写着"五百万支票恋爱"的滑稽戏折子。
+                </p>
+            </div>
+
+            <div class="court-item">
+                <i class="fas fa-fire court-icon"></i>
+                <h3 class="court-title">斯哈奏章</h3>
+                <p class="court-desc">
+                    用"斯哈斯哈"加热冻僵的奏章，假装没看见"被移出"的邮戳，群聊的门后藏着含羞草的私语。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 自由宣言 -->
+    <section id="freedom" class="freedom-section">
+        <div class="freedom-overlay"></div>
+        <div class="freedom-content">
+            <h2 class="freedom-title">自由宣言</h2>
+
+            <p class="freedom-text">
+                自由，就是把"想当世界大王"的宣言，腌进酸辣鲜香的日常坛子里，等某个不下雨的黄昏，和看晚霞的老太太分食，并宣布：
+            </p>
+
+            <h2 class="freedom-title">"朕的天下，刚刚好。"</h2>
+
+            <div class="signature">—— 射手座大王,膜拜我吧</div>
+        </div>
+    </section>
+
+    <script>
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '15px 50px';
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            } else {
+                navbar.style.padding = '20px 50px';
+                navbar.style.background = 'rgba(255, 255, 255, 0.8)';
+            }
+        });
+
+        // 卡片悬停动画
+        const cards = document.querySelectorAll('.realm-card, .court-item');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = this.classList.contains('realm-card')
+                    ? 'translateY(-20px)'
+                    : 'scale(1.03)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'none';
+            });
+        });
+
+        // 按钮点击效果
+        const crownBtn = document.querySelector('.crown-btn');
+        crownBtn.addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-crown crown-icon"></i>朝拜之旅已开启！';
+            this.style.background = 'linear-gradient(45deg, var(--gold), var(--berry-pink))';
+
+            // 滚动到疆域部分
+            document.querySelector('#realm').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
